@@ -15,10 +15,10 @@ from app.models.product import Product
 app = create_app()
 
 SAMPLE_PRODUCTS = [
-    {"name": "Wireless Mouse", "description": "Ergonomic wireless mouse with USB receiver.", "price": 19.99, "stock": 50},
-    {"name": "Mechanical Keyboard", "description": "RGB backlit mechanical keyboard, blue switches.", "price": 59.99, "stock": 30},
-    {"name": "USB-C Hub", "description": "7-in-1 USB-C hub with HDMI, USB 3.0, and SD card reader.", "price": 34.99, "stock": 0},
-    {"name": "Laptop Stand", "description": "Adjustable aluminum laptop stand, foldable.", "price": 24.99, "stock": 75},
+    {"name": "Wireless Mouse", "description": "Ergonomic wireless mouse with USB receiver.", "category": "Accessories", "price": 19.99, "stock": 50},
+    {"name": "Mechanical Keyboard", "description": "RGB backlit mechanical keyboard, blue switches.", "category": "Accessories", "price": 59.99, "stock": 30},
+    {"name": "USB-C Hub", "description": "7-in-1 USB-C hub with HDMI, USB 3.0, and SD card reader.", "category": "Accessories", "price": 34.99, "stock": 0},
+    {"name": "Laptop Stand", "description": "Adjustable aluminum laptop stand, foldable.", "category": "Furniture", "price": 24.99, "stock": 75},
 ]
 
 with app.app_context():

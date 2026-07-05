@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 
+from app.extensions import db
 from app.models.product import Product
 
 product_bp = Blueprint("product", __name__, url_prefix="/products")
@@ -7,8 +8,31 @@ product_bp = Blueprint("product", __name__, url_prefix="/products")
 
 @product_bp.route("/")
 def list_products():
-    products = Product.query.filter_by(is_active=True).order_by(Product.created_at.desc()).all()
-    return render_template("products/list.html", products=products)
+    query = Product.query.filter_by(is_active=True)
+
+    search_term = request.args.get("q", "").strip()
+    if search_term:
+        query = query.filter(Product.name.ilike(f"%{search_term}%"))
+
+    category = request.args.get("category", "").strip()
+    if category:
+        query = query.filter(Product.category == category)
+
+    products = query.order_by(Product.created_at.desc()).all()
+
+    # Distinct categories among active products, for the filter dropdown
+    categories = [
+        row[0] for row in
+        db.session.query(Product.category).filter_by(is_active=True).distinct().order_by(Product.category).all()
+    ]
+
+    return render_template(
+        "products/list.html",
+        products=products,
+        categories=categories,
+        search_term=search_term,
+        selected_category=category,
+    )
 
 
 @product_bp.route("/<int:product_id>")

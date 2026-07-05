@@ -5,6 +5,29 @@
 {% block content %}
 <h1 class="mb-4">Products</h1>
 
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-sm-6 col-md-5">
+        <input type="text" name="q" class="form-control" placeholder="Search products..."
+               value="{{ search_term }}">
+    </div>
+    <div class="col-sm-4 col-md-3">
+        <select name="category" class="form-select">
+            <option value="">All Categories</option>
+            {% for cat in categories %}
+                <option value="{{ cat }}" {{ "selected" if cat == selected_category }}>{{ cat }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-sm-2 col-md-2">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+    {% if search_term or selected_category %}
+    <div class="col-12">
+        <a href="{{ url_for('product.list_products') }}" class="small">Clear filters</a>
+    </div>
+    {% endif %}
+</form>
+
 {% if products %}
 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
     {% for product in products %}
@@ -33,6 +56,12 @@
     {% endfor %}
 </div>
 {% else %}
-<p class="text-muted">No products available yet. Check back soon.</p>
+<p class="text-muted">
+    {% if search_term or selected_category %}
+        No products match your search.
+    {% else %}
+        No products available yet. Check back soon.
+    {% endif %}
+</p>
 {% endif %}
 {% endblock %}
